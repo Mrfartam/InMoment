@@ -7,6 +7,7 @@ public class MenuUIController : MonoBehaviour
     public GameObject filtersPanel;
     public GameObject panelLayout;
     public GameObject notFoundPanel;
+    public GameObject findingPanel;
     public PlaceFilter placeFilter;
     public MenuAgregator menuAgregator;
     public MarkerRenderer markerRenderer;
@@ -19,6 +20,7 @@ public class MenuUIController : MonoBehaviour
         animator = GetComponent<Animator>();
         isMenuClosed = true;
         isNotFoundErrorClosed = true;
+        placeFilter.onFindedPlace += ShowPlaces;
     }
     public void ToggleOpening()
     {
@@ -55,5 +57,23 @@ public class MenuUIController : MonoBehaviour
         notFoundPanel.SetActive(isNotFoundErrorClosed);
         panelLayout.SetActive(isNotFoundErrorClosed);
         isNotFoundErrorClosed = !isNotFoundErrorClosed;
+    }
+    public void ShowPlaces()
+    {
+        menuAgregator.FillMainMenu(placeFilter.filteredPlaces);
+        markerRenderer.CreateMarkers(placeFilter.filteredPlaces
+            .Select(p => LocationTransform.LatLonToUnityPos(p.location, mapView.zoomLevel, mapView.center0))
+            .ToList());
+        findingPanel.SetActive(false);
+        panelLayout.SetActive(false);
+        CloseFilters();
+    }
+    public void ExpandSearchArea()
+    {
+        StartCoroutine(placeFilter.placeFinder.FindPlacesInRadius(mapView.center, 2.5f));
+        StartCoroutine(placeFilter.CheckPlacesInArea(2.5f));
+        notFoundPanel.SetActive(false);
+        isNotFoundErrorClosed = !isNotFoundErrorClosed;
+        findingPanel.SetActive(true);
     }
 }
