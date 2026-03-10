@@ -19,7 +19,7 @@ public enum FilterOption
     asian_cuisine,
     oriental_cuisine,
     caucasian_cuisine,
-    russain_cuisine,
+    russian_cuisine,
     chinese_cuisine,
     // Ещё другие виды кухонь
 }
@@ -31,6 +31,6 @@ public static class FilterTypeToOption
         { FilterType.contact, new() { FilterOption.with_phone, FilterOption.with_website } },
         { FilterType.payment_method, new() { FilterOption.payment_card, FilterOption.payment_cash } },
         { FilterType.cuisine, new() { FilterOption.asian_cuisine, FilterOption.oriental_cuisine,
-            FilterOption.caucasian_cuisine, FilterOption.chinese_cuisine, FilterOption.russain_cuisine } }
+            FilterOption.caucasian_cuisine, FilterOption.chinese_cuisine, FilterOption.russian_cuisine } }
     };
 }

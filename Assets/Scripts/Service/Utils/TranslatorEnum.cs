@@ -21,7 +21,7 @@ public static class TranslatorEnum
         { FilterOption.asian_cuisine, "Азиатская" },
         { FilterOption.oriental_cuisine, "Восточноазиатская" },
         { FilterOption.chinese_cuisine, "Китайская" },
-        { FilterOption.russain_cuisine, "Русская" },
+        { FilterOption.russian_cuisine, "Русская" },
         { FilterOption.caucasian_cuisine, "Кавказская" }
     };
     public static readonly Dictionary<Category, string> category = new()
