@@ -1,16 +1,21 @@
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class MenuUIController : MonoBehaviour
 {
     private Animator animator;
+
     public GameObject filtersPanel;
     public GameObject panelLayout;
     public GameObject notFoundPanel;
     public GameObject findingPanel;
+    public GameObject noInternetPanel;
+
     public PlaceFilter placeFilter;
     public MenuAgregator menuAgregator;
     public MarkerRenderer markerRenderer;
+    public InternetService internetService;
     public MapView mapView;
 
     public bool isMenuClosed;
@@ -70,10 +75,21 @@ public class MenuUIController : MonoBehaviour
     }
     public void ExpandSearchArea()
     {
-        StartCoroutine(placeFilter.placeFinder.FindPlacesInRadius(mapView.center, 2.5f));
-        StartCoroutine(placeFilter.CheckPlacesInArea(2.5f));
-        notFoundPanel.SetActive(false);
-        isNotFoundErrorClosed = !isNotFoundErrorClosed;
-        findingPanel.SetActive(true);
+        StartCoroutine(internetService.CheckInternetConnection((hasInternet) =>
+        {
+            if (hasInternet)
+            {
+                StartCoroutine(placeFilter.placeFinder.FindPlacesInRadius(mapView.center, 2.5f));
+                StartCoroutine(placeFilter.CheckPlacesInArea(2.5f));
+                notFoundPanel.SetActive(false);
+                isNotFoundErrorClosed = !isNotFoundErrorClosed;
+                findingPanel.SetActive(true);
+            }
+            else
+            {
+                noInternetPanel.SetActive(true);
+                noInternetPanel.GetComponent<NoInternetPanelController>().InitializePanel(false);
+            }
+        }));
     }
 }

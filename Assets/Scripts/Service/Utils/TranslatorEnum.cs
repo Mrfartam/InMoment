@@ -22,12 +22,13 @@ public static class TranslatorEnum
         { FilterOption.oriental_cuisine, "Восточноазиатская" },
         { FilterOption.chinese_cuisine, "Китайская" },
         { FilterOption.russian_cuisine, "Русская" },
-        { FilterOption.caucasian_cuisine, "Кавказская" }
+        { FilterOption.caucasian_cuisine, "Кавказская" },
+        { FilterOption.italian_cuisine, "Итальянская" }
     };
     public static readonly Dictionary<Category, string> category = new()
     {
         { Category.food, "Поесть" },
-        { Category.drink, "Попить" },
+        { Category.drink, "Выпить" },
         { Category.entertainment, "Развлечься" },
         { Category.children, "С детьми" }
     };
