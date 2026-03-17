@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -12,12 +13,18 @@ public class MapRenderer : MonoBehaviour
     private Stack<GameObject> tilesPool = new();
 
     private Dictionary<(int zoom, int x, int y), Texture2D> textureCache = new();
+
+    private string mapTilesPath;
     private void Awake()
     {
         mapView = GetComponent<MapView>();
         mapView.onTileCreate += CreateTile;
         mapView.onTileHide += HideTile;
         mapView.onTileRemove += RemoveTile;
+
+        mapTilesPath = Path.Combine(Application.persistentDataPath, "MapTiles");
+        if(!Directory.Exists(mapTilesPath))
+            Directory.CreateDirectory(mapTilesPath);
     }
     private void CreateTile(Vector2Int pos)
     {
@@ -27,8 +34,21 @@ public class MapRenderer : MonoBehaviour
     {
         var key = (mapView.zoomLevel, tilePos.x, tilePos.y);
 
-        if(textureCache.TryGetValue(key, out var tex))
+        if (textureCache.TryGetValue(key, out var tex))
         {
+            ApplyTile(tilePos, tex);
+            yield break;
+        }
+
+        string fileName = $"{key.zoomLevel}_{key.x}_{key.y}.png";
+        string filePath = Path.Combine(mapTilesPath, fileName);
+        if (File.Exists(filePath))
+        {
+            byte[] bytes = File.ReadAllBytes(filePath);
+            tex = new Texture2D(2, 2);
+            tex.LoadImage(bytes);
+
+            textureCache[key] = tex;
             ApplyTile(tilePos, tex);
             yield break;
         }
@@ -46,8 +66,9 @@ public class MapRenderer : MonoBehaviour
             else
             {
                 tex = DownloadHandlerTexture.GetContent(uwr);
-
                 textureCache[key] = tex;
+
+                File.WriteAllBytes(filePath, tex.EncodeToPNG());
 
                 ApplyTile(tilePos, tex);
             }
