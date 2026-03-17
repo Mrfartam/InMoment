@@ -12,7 +12,7 @@ public class MapView : MonoBehaviour
 
     public GeoLocation center;
     private Vector2 centerXY;
-    public Vector2 center0;
+    public Vector2 center0; // centerBase
     public int zoomLevel;
     public int buffer;
 
@@ -67,14 +67,14 @@ public class MapView : MonoBehaviour
 
         if (Input.location.status == LocationServiceStatus.Failed)
         {
-            Debug.Log("Невозможно определить местоположение.");
-            center = new GeoLocation(56.468733f, 84.945077f/*56.45245f, 84.97238f*/);
+            Debug.Log("ГЌГҐГўГ®Г§Г¬Г®Г¦Г­Г® Г®ГЇГ°ГҐГ¤ГҐГ«ГЁГІГј Г¬ГҐГ±ГІГ®ГЇГ®Г«Г®Г¦ГҐГ­ГЁГҐ.");
+            center = new GeoLocation(56.468733f, 84.945077f); //56.45245f, 84.97238f - 7 Г®ГЎГ№ГҐГ¦ГЁГІГЁГҐ
             yield break;
         }
-        else if (Input.location.status == LocationServiceStatus.Stopped ||
-            Input.location.status == LocationServiceStatus.Failed || timeout <= 0){
-            Debug.LogWarning("GPS недоступен");
-            center = new GeoLocation(56.468733f, 84.945077f/*56.45245f, 84.97238f*/);
+        else if (Input.location.status == LocationServiceStatus.Stopped || timeout <= 0)
+        {
+            Debug.LogWarning("GPS Г­ГҐГ¤Г®Г±ГІГіГЇГҐГ­");
+            center = new GeoLocation(56.468733f, 84.945077f); //56.45245f, 84.97238f - 7 Г®ГЎГ№ГҐГ¦ГЁГІГЁГҐ
         }
         else
         {
