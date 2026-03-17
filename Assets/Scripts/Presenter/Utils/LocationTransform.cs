@@ -31,4 +31,20 @@ public class LocationTransform
         float lat = (float)(Math.Atan(Math.Sinh(Math.PI - (Math.PI * pos.y) / (1 << (zoomLevel - 1)))) * 180.0 / Math.PI);
         return new GeoLocation(lat, lon);
     }
+    public static double DistanceBetween(GeoLocation first, GeoLocation second)
+    {
+        double EarthRadius = 6371.0;
+        double dLat = Math.PI * (second.latitude - first.latitude) / 180.0;
+        double dLon = Math.PI * (second.longitude - first.longitude) / 180.0;
+
+        double rLat1 = Math.PI * first.latitude / 180.0;
+        double rLat2 = Math.PI * second.latitude / 180.0;
+
+        double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) + 
+            Math.Cos(rLat1) * Math.Cos(rLat2) * Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+
+        double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+
+        return EarthRadius * c;
+    }
 }
