@@ -38,13 +38,13 @@ public class PlaceFilter : MonoBehaviour
         if (ApplyFilters())
         {
             onFindedPlace?.Invoke();
-            Debug.Log($"Заведение найдено в области {area} от центра");
+            Debug.Log($"Заведение найдено в области {area} от текущего местоположения");
             yield break;
         }
         else
         {
             float newArea = area + 0.5f;
-            Debug.Log($"Текущая область: {area}");
+            Debug.Log($"Ни одно заведение не найдено. Новая область: {area}");
             yield return new WaitForSeconds(10f);
             StartCoroutine(placeFinder.FindPlacesInRadius(mapView.center, newArea));
             StartCoroutine(CheckPlacesInArea(newArea));

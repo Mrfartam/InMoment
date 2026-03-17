@@ -81,13 +81,16 @@ public class InternetService : MonoBehaviour
     }
     public void CheckInternet()
     {
-        if(!isChecking)
+        if (!isChecking)
             StartCoroutine(CheckInternetConnection((hasInternet) =>
             {
                 if (hasInternet)
                     EnableServices();
                 else
+                {
                     noInternetPanel.SetActive(true);
+                    noInternetPanel.GetComponent<NoInternetPanelController>().InitializePanel();
+                }
             }));
     }
 }
